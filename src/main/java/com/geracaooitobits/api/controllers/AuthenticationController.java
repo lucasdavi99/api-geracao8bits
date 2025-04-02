@@ -6,6 +6,7 @@ import com.geracaooitobits.api.dtos.LoginResponseDTO;
 import com.geracaooitobits.api.dtos.RegisterDTO;
 import com.geracaooitobits.api.entities.User;
 import com.geracaooitobits.api.repositories.UserRepository;
+import com.geracaooitobits.api.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @Autowired
-    private UserRepository repository;
+    private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
@@ -39,12 +40,11 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if(this.repository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
-
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.email(), encryptedPassword, data.role(), data.name(), data.phone());
-
-        this.repository.save(newUser);
-        return ResponseEntity.ok().build();
+        try {
+            User newUser = userService.createUser(data);
+            return ResponseEntity.ok(newUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

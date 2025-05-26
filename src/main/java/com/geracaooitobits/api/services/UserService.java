@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    UserRepository repository;
+    UserRepository userRepository;
 
     public User createUser(RegisterDTO data){
-        if(repository.findByEmail(data.email()) != null) {
+        if(userRepository.findByEmail(data.email()) != null) {
             throw new RuntimeException("Email já cadastrado!");
         }
 
@@ -25,6 +25,6 @@ public class UserService {
         newUser.setPhone(data.phone());
         newUser.setRole(Role.USER);
 
-        return repository.save(newUser);
+        return userRepository.save(newUser);
     }
 }

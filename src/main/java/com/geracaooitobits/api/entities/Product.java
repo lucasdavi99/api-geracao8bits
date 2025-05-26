@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Table(name = "products")
@@ -17,9 +19,14 @@ public class Product {
     @Id
     @GeneratedValue
     private UUID id;
+
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
-    private Double price;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal price;
 
     @Column(name = "stock_quantity")
     private Integer stockQuantity;

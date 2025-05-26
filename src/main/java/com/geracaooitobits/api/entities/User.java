@@ -44,14 +44,6 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(String email, String password, Role role, String name, String phone) {
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.name = name;
-        this.phone = phone;
-    }
-
     //Configuração do spring security relacionado a usuarios
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
